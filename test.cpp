@@ -30,7 +30,7 @@ struct Kunkun{
 
     void 唱歌(){
         int song;
-        cout << "请告诉我你想要唱哪首歌？" << endl;
+        cout << "请告诉我你想要我唱哪首歌？" << endl;
         cout << "1. 只因你太美" << endl;
         cout << "2. Deadman" << endl;
         cout << "3. 退出" << endl;
