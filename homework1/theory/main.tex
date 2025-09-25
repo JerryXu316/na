@@ -464,7 +464,7 @@ is not appropriate when the interval crosses zero.
 \noindent\rule{\textwidth}{.4pt}
 
 \subsubsection*{VIII.}
-(*) Consider solving $f(x) = 0$ ($f \in C^{k+1}$) by Newton's method with the starting point $x_0$ being a root of multiplicity $k$. Note that $a$ is a zero of multiplicity $k$ of the function $f$.
+(*) Consider solving $f(x) = 0$ ($f \in C^{k+1}$) by Newton's method with the starting point $x_0$ being a root of multiplicity $k$. Note that $\alpha$ is a zero of multiplicity $k$ of the function $f$.
 \begin{itemize}
     \item How can a multiple root be detected by examining the behavior of the points $(x_n, f(x_n))$?
     \item Prove that if $r$ is a zero of multiplicity $k$ of the function $f$, then quadratic convergence in Newton's iteration will be restored by making this modification:
@@ -474,50 +474,35 @@ is not appropriate when the interval crosses zero.
 \end{itemize}
 
 \textbf{Solution.}
-
 \paragraph{(1) Detecting a multiple root from the points $(x_n,f(x_n))$.}
-Let $r$ be the true root. If $r$ is a simple root then near $r$ the graph
-of $f$ crosses the $x$-axis and $f'(r)\neq0$. If $r$ is a multiple root of
-multiplicity $k\ge2$ then $f(r)=f'(r)=\cdots=f^{(k-1)}(r)=0$ and the graph
-is ``flat'' at the root: locally $f(x)\approx C(x-r)^k$ with $C\neq0$.
 
-From a practical point of view, the following observations help to detect
-a multiple root by looking at the sequence of points $(x_n,f(x_n))$:
 
-\begin{itemize}
-  \item \textbf{Flatness of the graph.} The $y$-values $f(x_n)$ go to zero,
-  but the slope values $f'(x_n)$ also tend to zero if the root is multiple.
-  So you will see points with small $y$ and small slope: the graph looks
-  tangent to the $x$-axis near the root.
+As we learned in class, when $\alpha$ weren't a zero of multiplicity of the function f,we have the following equation to evaluate the convergence:
 
-  \item \textbf{Algebraic relation between $f(x_n)$ and the local error.}
-  If $x_n$ is close to $r$ and $f(x)\approx C(x-r)^k$, then
-  $|f(x_n)|\approx |C|\,|x_n-r|^k$. Thus plotting (or comparing)
-  $\log|f(x_n)|$ versus $\log|x_n-r|$ would give an approximate slope $k$.
-  In practice $r$ is unknown, but one can use successive differences
-  $|x_{n}-x_{n-1}|$ as a proxy for $|x_n-r|$ and estimate the local order
-  by ratios like
-  \[
-  \frac{\log|f(x_n)|-\log|f(x_{n-1})|}{\log|x_n-x_{n-1}|-\log|x_{n-1}-x_{n-2}|}.
-  \]
-  A measured order near an integer $k\ge2$ indicates multiplicity.
+\[
+e_{n+1} = e_n^2 \frac{f''(\epsilon)}{2f'(x_n)}
+\]
 
-  \item \textbf{Convergence speed of plain Newton.} Plain Newton's method
-  (without modification) has only linear convergence for a root of
-  multiplicity $k>1$. So if you observe that Newton iterates converge
-  slowly (roughly geometrically with ratio close to $(k-1)/k$) rather than
-  quadratically, this suggests a multiple root.
+Back to our situation,because $\alpha$ is a zero of multiplicity $k$ of the function $f$ and  $f(x) = 0$ ($f \in C^{k+1}$),we can write $f(x)$ into $f(x) = (x - \alpha)^kg(x)$,$g \in C^{1}$
 
-  \item \textbf{Simple practical test.} Compute $f(x_n)$ and $f'(x_n)$. If
-  both become very small together and Newton steps $-f/f'$ are small and
-  convergence is slow, suspect multiplicity.
-\end{itemize}
+Similarily, we have:
 
-In short: look for a flat crossing (small $f$ and small $f'$), or detect
-the reduced convergence order of unmodified Newton — these are signals of
-a multiple root.
+\[
+e_{n+1} = e_n - \frac{f(x_n)}{f'(x_n)}= e_n - \frac{e_ng(x_n)}{kg(x_n) + e_ng'(x_n)}=e_n\frac{(k-1)g(x_n)-e_ng'(x_n)}{kg(x_n) + e_ng'(x_n)}=e_n\frac{(k-1)-e_n\frac{g'(x_n)}{g(x_n)}}{k + e_n\frac{g'(x_n)}{g(x_n)}}
+\]
+
+Thus, as \( n \to \infty \),
+\[
+\frac{e_{n+1}}{e_n} \to \frac{k-1}{k} < 1,
+\]
+so the convergence is only linear.  
+Consequently, a root of multiplicity \( k > 1 \) can be detected numerically by observing that the ratio \( \frac{|x_{n+1} - \alpha|}{|x_n - \alpha|} \) tends to the constant \( \frac{k-1}{k} \), i.e. the error decreases slowly and at a constant rate.
+
+
 
 \paragraph{(2) Proof that the modified iteration restores quadratic convergence.}
+
+
 Write $f$ near $r$ in the form
 \[
 f(x) = (x-r)^k g(x),
@@ -570,17 +555,4 @@ Thus the modification $x_{n+1}=x_n-k\,f(x_n)/f'(x_n)$ restores the usual
 quadratic convergence for a root of multiplicity $k$.
 
 
-
-
-
-
-% ===============================================
-\section*{ \center{\normalsize {Acknowledgement}} }
-Give your acknowledgements here(if any).
-
-
-\printbibliography
-
-If you are not familiar with \texttt{bibtex}, 
-it is acceptable to put a table here for your references.
 \end{document}
