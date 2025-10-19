@@ -28,9 +28,9 @@ public:
 
 class HermitePolynomial {
 private:
-    NewtonPolynomial p;            // 调用你已有的牛顿多项式
-    vector<double> x;              // 自己保存一份节点
-    vector<double> coefficients;   // 自己保存一份系数
+    NewtonPolynomial p;            
+    vector<double> x;              
+    vector<double> coefficients;   
 
 public:
     HermitePolynomial(const NewtonPolynomial &poly,
@@ -62,7 +62,7 @@ auto hermiteInterp(const vector<double> &x,
                    const vector<double> &z)
 {
     int n = x.size();
-    int m = 2 * n;  // 每个点重复一次
+    int m = 2 * n;  
     vector<double> X(m);
     vector<double> Y(m);
 
@@ -114,55 +114,26 @@ double f0 = p(x0);
 double df0 = p.diff(x0);
 */
 
-#include <iostream>
-#include <vector>
-#include <cmath>
-#include <iomanip>
-using namespace std;
-
 int main() {
-    // 使用和之前一样的函数 f(x)
-    class Func{
-    public:
-        double operator () (const double &x) const{
-            double tt = (x == 0) ? 0 : pow(x, 1.1) * log(x);
-            return sin(M_PI * x) + sin(M_PI * 4 * (x - 0.2)) + tt;
-        }
-        double diff (const double &x) const{
-            double tt = (x == 0) ? 0 : 1.1 * pow(x,0.1) * log(x);
-            return M_PI * cos(M_PI * x) + 4 * M_PI * cos(M_PI * 4 * (x - 0.2)) + (tt + pow(x,0.1));
-        }
-    } f;
-
-    // 📌 1. 定义插值节点
     vector<double> x = {0.0, 0.5, 1.0};
-    vector<double> y, z;
-    for (double xi : x) {
-        y.push_back(f(xi));
-        z.push_back(f.diff(xi));
-    }
+    vector<double> y = {f(0.0), f(0.5), f(1.0)};
+    vector<double> z = {f.diff(0.0), f.diff(0.5), f.diff(1.0)};
 
-    // 📌 2. 构造 Hermite 插值多项式
     auto p = hermiteInterp(x, y, z);
 
-    // 📌 3. 插值点误差检测
-    cout << fixed << setprecision(8);
-    cout << "=== 插值点误差检测 ===" << endl;
-    for (size_t i = 0; i < x.size(); i++) {
-        double xi = x[i];
-        double fx = f(xi);
-        double dfx = f.diff(xi);
-        double px = p(xi);
-        double dpx = p.diff(xi);
-        double err_f = fabs(fx - px);
-        double err_df = fabs(dfx - dpx);
-        cout << "x = " << setw(8) << xi
-             << "  f(x) = " << setw(12) << fx
-             << "  p(x) = " << setw(12) << px
-             << "  |误差| = " << setw(12) << err_f << endl;
-        cout << "          f'(x) = " << setw(12) << dfx
-             << "  p'(x) = " << setw(12) << dpx
-             << "  |误差| = " << setw(12) << err_df << endl;
+    cout << fixed;
+    for (double x0 = 0.0; x0 <= 1.0; x0 += 0.2) {
+        double f_val = f(x0);
+        double p_val = p(x0);
+        double f_diff = f.diff(x0);
+        double p_diff = p.diff(x0);
+        cout << "x = " << x0 
+             << "  f(x) = " << f_val 
+             << "  p(x) = " << p_val 
+             << "  |误差| = " << fabs(f_val - p_val) << endl;
+        cout << "       f'(x) = " << f_diff 
+             << "  p'(x) = " << p_diff 
+             << "  |误差| = " << fabs(f_diff - p_diff) << endl;
     }
 
     return 0;
